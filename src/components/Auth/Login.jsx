@@ -1,10 +1,8 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { loginService } from "../../services/authService";
 import API from "../../services/api";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleSubmit = async (e) => {
@@ -14,7 +12,8 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-      login(userData);
+      console.log(userData);
+      window.location.href = "/";
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");
     }

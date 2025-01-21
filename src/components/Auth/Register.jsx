@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { registerService } from "../../services/authService";
 import API from "../../services/api";
 
 const Register = () => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createUser } from "../../services/userService";
+import API from "../../services/api";
 
 const UserForm = ({ onUserAdded }) => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,7 @@ const UserForm = ({ onUserAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newUser = await createUser(formData);
+      const newUser = await API.post("/user/register", formData);
       onUserAdded(newUser);
       setFormData({ name: "", email: "", phone: "", role: "Student" });
     } catch (err) {

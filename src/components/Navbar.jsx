@@ -3,17 +3,24 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const setLogout = async () => {
+    try {
+      await API.post("/user/logout");
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
-    <nav>
+    <nav className="flex bg-black justify-between items-center p-4 text-white">
       <Link to="/">Home</Link>
       {user ? (
         <>
           <Link to="/users">Users</Link>
           <Link to="/messages">Messages</Link>
           <Link to="/profile">Profile</Link>
-          <button onClick={logout}>Logout</button>
+          <button onClick={setLogout}>Logout</button>
         </>
       ) : (
         <>

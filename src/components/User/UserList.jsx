@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { loginService } from "../../services/authService";
+import API from "../../services/api";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -9,7 +9,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = await loginService(formData.email, formData.password);
+      const userData = await API.post("/user/login",{email:formData.email, password:formData.password});
       login(userData);
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");

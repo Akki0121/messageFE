@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { verifyToken } from "../services/authService";
+import API from "../services/api";
 
 export const AuthContext = createContext();
 
@@ -8,21 +8,25 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+ 
     const checkAuth = async () => {
       try {
-        const loggedInUser = await verifyToken();
-        setUser(loggedInUser);
+        const loggedInUser = await API.get("/verify");
+        setUser(loggedInUser.data);
       } catch {
         setUser(null);
       }
     };
-    checkAuth();
-  }, []);
+ 
 
-  const login = (userData) => {
-    setUser(userData);
-    navigate("/");
+  const login = async() => {
+    try {
+      const userData = await API.get("/verify");
+      setUser(userData);
+      navigate("/");
+    } catch (err) {
+      alert(err.response?.data?.error || "Login failed");
+    }
   };
 
   const logout = () => {
@@ -32,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, checkAuth, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

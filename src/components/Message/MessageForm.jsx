@@ -10,7 +10,7 @@ const MessageForm = ({ onMessageSent }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newMessage = await sendMessage(formData);
+      const newMessage = await API.post("/messages/send", {formData});
       onMessageSent(newMessage);
       setFormData({ receiverId: "", text: "" });
     } catch (err) {

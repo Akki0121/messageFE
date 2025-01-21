@@ -8,7 +8,7 @@ const MessageList = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const data = await getMessages();
+        const data = await API.get("/messages/get-message");
         setMessages(data);
       } catch (err) {
         console.error(err);
