@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 
@@ -6,20 +6,19 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
- 
-    const checkAuth = async () => {
-      try {
-        const loggedInUser = await API.get("/verify");
-        setUser(loggedInUser.data);
-      } catch {
-        setUser(null);
-      }
-    };
- 
+  const checkAuth = async () => {
+    try {
+      const loggedInUser = await API.get("/verify");
+      setUser(loggedInUser.data);
+    } catch {
+      setUser(null);
+    }
+  };
 
-  const login = async() => {
+  const login = async () => {
     try {
       const userData = await API.get("/verify");
       setUser(userData);
@@ -29,14 +28,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const userProfile = async () => {
+    try {
+      const userData = await API.get("/user/profile/" + user.id);
+      setUserData(userData.data);
+    } catch (err) {
+      alert(err.response?.data?.error || "Profile failed");
+    }
+  };
   const logout = () => {
     setUser(null);
-    document.cookie = "authToken=; Max-Age=0"; // Clear the cookie
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   return (
-    <AuthContext.Provider value={{ user, checkAuth, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, userData, checkAuth, login, userProfile, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,22 +1,26 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { userdata, userProfile } = useContext(AuthContext);
 
-  if (!user) return <p>Loading...</p>;
+  useEffect(() => {
+    userProfile();
+  }, []);
+
+  if (!userdata) return <p>Loading...</p>;
 
   return (
     <div className="profile">
       <h2>Profile</h2>
       <p>
-        <strong>Name:</strong> {user.name}
+        <strong>Name:</strong> {userdata.name}
       </p>
       <p>
-        <strong>Email:</strong> {user.email}
+        <strong>Email:</strong> {userdata.email}
       </p>
       <p>
-        <strong>Role:</strong> {user.role}
+        <strong>Role:</strong> {userdata.role}
       </p>
     </div>
   );
